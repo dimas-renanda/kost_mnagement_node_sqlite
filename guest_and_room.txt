@@ -1,0 +1,167 @@
+```text
+Please populate the database using the data below.
+
+RULES
+
+1. Ensure every Room exists. If a Room does not exist, create it first.
+
+2. Room type mapping:
+   - AC  → room_type = "AC"
+   - FAN → room_type = "FAN"
+
+3. Default room price:
+   - AC rooms  → price = 1200000
+   - FAN rooms → price = 800000
+
+4. Every guest must be created as a separate Guest record.
+
+5. If a room has multiple occupants, create one Guest record for each person and assign all of them to the same Room.
+
+6. Do not create Guest records for empty rooms.
+
+7. If the Room already exists, reuse it and update any missing fields (room_type and price) instead of creating a duplicate.
+
+DATA
+
+Room 1
+Type: AC
+Price: 1200000
+Guests:
+- Koko
+
+Room 2
+Type: FAN
+Price: 800000
+Guests:
+- Rafi
+- Emir
+
+Room 3
+Type: FAN
+Price: 800000
+Guests:
+- Keyza
+
+Room 4
+Type: AC
+Price: 1200000
+Guests:
+- Wikan
+
+Room 5
+Type: AC
+Price: 1200000
+Guests:
+- Hanan
+
+Room 6
+Type: AC
+Price: 1200000
+Guests:
+- Vita
+
+Room 7
+Type: FAN
+Price: 800000
+Guests:
+- Jihan
+- Ilman
+
+Room 8
+Type: AC
+Price: 1200000
+Guests:
+- Martha
+- Agma
+
+Room 9
+Type: FAN
+Price: 800000
+Guests:
+- Faranita
+
+Room 10
+Type: AC
+Price: 1200000
+Guests:
+- Noval
+
+Room 11
+Type: FAN
+Price: 800000
+Guests:
+- Iman
+
+Room 12
+Type: FAN
+Price: 800000
+Guests:
+- Fahri
+
+Room 13
+Type: FAN
+Price: 800000
+Guests:
+- Artha
+
+Room 14
+Type: FAN
+Price: 800000
+Guests:
+(None)
+
+Room 15
+Type: AC
+Price: 1200000
+Guests:
+(None)
+
+Room 16
+Type: AC
+Price: 1200000
+Guests:
+- Fitri
+
+Room 301
+Type: FAN
+Price: 800000
+Guests:
+- Rivaldo
+
+Room 302
+Type: FAN
+Price: 800000
+Guests:
+- Jihan
+
+Room 303
+Type: FAN
+Price: 800000
+Guests:
+- Angka
+
+Room 304
+Type: FAN
+Price: 800000
+Guests:
+- Mariano
+
+Room 305
+Type: FAN
+Price: 800000
+Guests:
+(None)
+
+Room 306
+Type: FAN
+Price: 800000
+Guests:
+- Dimas
+- Dimdim
+
+Room 307
+Type: FAN
+Price: 800000
+Guests:
+- Fahian
+```

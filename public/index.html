@@ -7,60 +7,398 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <header>
-        <div>
-          <p class="eyebrow">Admin Dashboard</p>
-          <h1>Kost Management</h1>
+    <div id="login-screen" class="auth-screen">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <span class="brand-badge-sm">KM</span>
+          <div>
+            <p class="eyebrow">Private Access</p>
+            <h1>Admin Portal</h1>
+          </div>
         </div>
-        <p class="subtitle">Manage rooms, guests, and KTP uploads from one place.</p>
-      </header>
-
-      <section class="panel">
-        <h2>Room List</h2>
-        <form id="room-form" class="grid-form">
-          <input type="hidden" id="room-id" />
-          <input type="text" id="room-name" placeholder="Room name" required />
-          <input type="text" id="room-type" placeholder="Type" required />
-          <input type="number" id="room-price" placeholder="Price" min="0" required />
-          <select id="room-status">
-            <option value="available">Available</option>
-            <option value="occupied">Occupied</option>
-          </select>
-          <button type="submit">Save Room</button>
-          <button type="button" id="room-cancel" class="secondary">Cancel</button>
+        <p class="auth-copy">Sign in with your administrator account to manage rooms, guests, and user permissions.</p>
+        <form id="login-form" class="stack-form auth-form">
+          <input id="login-username" type="text" placeholder="Username" required />
+          <input id="login-password" type="password" placeholder="Password" required />
+          <button type="submit">Sign in</button>
         </form>
-        <table>
-          <thead>
-            <tr><th>Name</th><th>Type</th><th>Price</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody id="room-list"></tbody>
-        </table>
-      </section>
+        <p id="login-message" class="form-message">Default: admin / s2a2026</p>
+      </div>
+    </div>
 
-      <section class="panel">
-        <h2>Guest List</h2>
-        <form id="guest-form" class="grid-form">
-          <input type="hidden" id="guest-id" />
-          <input type="text" id="guest-name" placeholder="Full name" required />
-          <input type="text" id="guest-phone" placeholder="Phone" />
-          <select id="guest-room"></select>
-          <input type="text" id="guest-card" placeholder="Card number" />
-          <input type="text" id="guest-notes" placeholder="Notes" />
-          <select id="guest-status">
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <button type="submit">Save Guest</button>
-          <button type="button" id="guest-cancel" class="secondary">Cancel</button>
-        </form>
-        <table>
-          <thead>
-            <tr><th>Name</th><th>Phone</th><th>Room</th><th>Card</th><th>KTP</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody id="guest-list"></tbody>
-        </table>
-      </section>
+    <div id="app-shell" class="app-shell hidden">
+      <div class="app-layout">
+        <aside class="sidebar-panel">
+          <div class="brand-card">
+            <div class="brand-badge">KM</div>
+            <div>
+              <h3>Kost Management</h3>
+              <p>ERP flow layout</p>
+            </div>
+          </div>
+
+          <div class="module-search">
+            <!-- <label for="module-search-input" class="sr-only">Search modules</label> -->
+            <input id="module-search-input" type="search" placeholder="Search modules" aria-label="Search modules" />
+          </div>
+
+          <nav class="module-nav" aria-label="Dashboard modules">
+            <button type="button" class="module-btn active" data-module="overview">
+              <span class="module-icon" aria-hidden="true">◈</span>
+              <span class="module-label">Overview</span>
+            </button>
+            <button type="button" class="module-btn" data-module="rooms">
+              <span class="module-icon" aria-hidden="true">▣</span>
+              <span class="module-label">Rooms</span>
+            </button>
+            <button type="button" class="module-btn" data-module="guests">
+              <span class="module-icon" aria-hidden="true">◫</span>
+              <span class="module-label">Guests</span>
+            </button>
+            <button type="button" class="module-btn" data-module="guestStats">
+              <span class="module-icon" aria-hidden="true">⧉</span>
+              <span class="module-label">Guest Stats</span>
+            </button>
+            <button type="button" class="module-btn" data-module="cardManagement">
+              <span class="module-icon" aria-hidden="true">▤</span>
+              <span class="module-label">Cards</span>
+            </button>
+            <button type="button" class="module-btn" data-module="stats">
+              <span class="module-icon" aria-hidden="true">◳</span>
+              <span class="module-label">Stats</span>
+            </button>
+            <button type="button" class="module-btn" data-module="access">
+              <span class="module-icon" aria-hidden="true">⚙</span>
+              <span class="module-label">Access</span>
+            </button>
+          </nav>
+
+          <div class="sidebar-footer">
+            <div class="user-card">
+              <p>Signed in as</p>
+              <strong id="user-name">Admin</strong>
+              <span id="user-role">Role • Admin</span>
+            </div>
+            <button id="logout-btn" class="secondary">Logout</button>
+          </div>
+        </aside>
+
+        <main class="content-panel">
+          <!-- <header class="topbar">
+            <div>
+              <p class="eyebrow">Admin Dashboard</p>
+              <h1>Operations Hub</h1>
+              <p class="subtitle">A modern flow-based ERP layout for rooms, guest tracking, and permissions.</p>
+            </div>
+            <div class="topbar-actions">
+              <span class="badge status">Live</span>
+            </div>
+          </header> -->
+
+          <section id="overview-module" class="panel">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Overview</h2>
+                <p class="muted">Key metrics and current room occupancy in one place.</p>
+              </div>
+            </div>
+            <div class="summary-grid">
+              <article class="summary-card">
+                <p>Total Rooms</p>
+                <strong id="summary-total">0</strong>
+              </article>
+              <article class="summary-card">
+                <p>Available</p>
+                <strong id="summary-available">0</strong>
+              </article>
+              <article class="summary-card">
+                <p>Occupied</p>
+                <strong id="summary-occupied">0</strong>
+              </article>
+              <article class="summary-card">
+                <p>Active Guests</p>
+                <strong id="summary-active">0</strong>
+              </article>
+            </div>
+          </section>
+
+          <section id="rooms-module" class="panel hidden">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Room Management</h2>
+                <p class="muted">Manage room inventory with a clean form-and-table workflow.</p>
+              </div>
+            </div>
+            <div class="module-grid">
+              <div class="module-card form-card">
+                <h3>Room details</h3>
+                <form id="room-form" class="grid-form">
+                  <input type="hidden" id="room-id" />
+                  <input type="text" id="room-name" placeholder="Room name" required />
+                  <select id="room-type" required>
+                    <option value="">Select type</option>
+                    <option value="AC">AC</option>
+                    <option value="FAN">FAN</option>
+                  </select>
+                  <input type="number" id="room-price" placeholder="Price" min="0" required />
+                  <select id="room-status">
+                    <option value="available">Available</option>
+                    <option value="occupied">Occupied</option>
+                  </select>
+                  <div class="form-actions">
+                    <button type="submit">Save Room</button>
+                    <button type="button" id="room-cancel" class="secondary">Cancel</button>
+                  </div>
+                </form>
+              </div>
+              <div class="module-card table-card">
+                <h3>Room list</h3>
+                <table>
+                  <thead>
+                    <tr><th>Name</th><th>Type</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="room-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section id="guests-module" class="panel hidden">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Guest Management</h2>
+                <p class="muted">Search guests quickly and add or update guest profiles in a popup form.</p>
+              </div>
+              <div class="guest-controls">
+                <input id="guest-search-input" class="search-input" type="search" placeholder="Search guests" aria-label="Search guests" />
+                <button type="button" id="open-guest-modal" class="secondary">Add guest</button>
+              </div>
+            </div>
+            <div class="module-card table-card">
+              <h3>Guest list</h3>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr><th>Name</th><th>Phone</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Card</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="guest-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+          <div id="guest-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="guest-modal-title">
+            <div class="modal-dialog">
+              <div class="modal-header">
+                <div>
+                  <h3 id="guest-modal-title">Guest profile</h3>
+                  <p class="muted">Add or update guest details, room assignment, and stay dates.</p>
+                </div>
+                <button type="button" id="close-guest-modal" class="icon-button" aria-label="Close guest form">×</button>
+              </div>
+              <form id="guest-form" class="modal-form">
+                <input type="hidden" id="guest-id" />
+                <div class="modal-grid">
+                  <input type="text" id="guest-name" placeholder="Full name" required />
+                  <input type="text" id="guest-phone" placeholder="Phone" />
+                  <select id="guest-room"></select>
+                  <input type="text" id="guest-card" placeholder="Card number" />
+                  <select id="guest-status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                  <div class="date-field-group">
+                    <label class="input-label" for="guest-checkin">Check-in date</label>
+                    <input type="date" id="guest-checkin" />
+                  </div>
+                  <div class="date-field-group">
+                    <label class="input-label" for="guest-checkout">Check-out date</label>
+                    <input type="date" id="guest-checkout" />
+                    <p class="field-note">Optional. It will auto-fill when status is set to inactive.</p>
+                  </div>
+                  <textarea id="guest-notes" placeholder="Notes" rows="4"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit">Save Guest</button>
+                  <button type="button" id="guest-cancel" class="secondary">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <section id="stats-module" class="panel hidden">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Statistics</h2>
+                <p class="muted">Review income and occupancy performance for the current period.</p>
+              </div>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card featured">
+                <p>Estimated Monthly Income</p>
+                <strong id="monthly-income">Rp 0</strong>
+                <span>From occupied rooms</span>
+              </article>
+              <article class="stat-card">
+                <p>Potential Monthly Income</p>
+                <strong id="potential-income">Rp 0</strong>
+                <span>If all rooms are occupied</span>
+              </article>
+            </div>
+            <div class="income-breakdown">
+              <h3>Occupied room income</h3>
+              <ul id="income-breakdown"></ul>
+            </div>
+          </section>
+
+          <section id="guest-stats-module" class="panel hidden">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Guest Statistics</h2>
+                <p class="muted">Review guest stays, checkin/checkout history, and average stay duration.</p>
+              </div>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card featured">
+                <p>Total Guests</p>
+                <strong id="guest-total">0</strong>
+              </article>
+              <article class="stat-card">
+                <p>Active Guests</p>
+                <strong id="guest-active">0</strong>
+              </article>
+              <article class="stat-card">
+                <p>Current Stays</p>
+                <strong id="guest-current">0</strong>
+              </article>
+              <article class="stat-card">
+                <p>Checked Out</p>
+                <strong id="guest-checked-out">0</strong>
+              </article>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card">
+                <p>Average Stay (days)</p>
+                <strong id="guest-average-stay">0</strong>
+              </article>
+              <article class="stat-card">
+                <p>Longest Stay (days)</p>
+                <strong id="guest-longest-stay">0</strong>
+              </article>
+              <article class="stat-card">
+                <p>Shortest Stay (days)</p>
+                <strong id="guest-shortest-stay">0</strong>
+              </article>
+            </div>
+            <div class="module-card table-card">
+              <h3>Guest stay history</h3>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr><th>Name</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Stay (days)</th><th>Status</th></tr>
+                  </thead>
+                  <tbody id="guest-stats-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section id="card-management-module" class="panel hidden">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Card Management</h2>
+                <p class="muted">Link guest cards to rooms and manage card assignments in one place.</p>
+              </div>
+            </div>
+            <div class="module-grid">
+              <div class="module-card form-card">
+                <h3>Card assignment</h3>
+                <form id="card-form" class="grid-form">
+                  <input type="hidden" id="card-guest-id" />
+                  <select id="card-guest-select"><option value="">Select guest</option></select>
+                  <select id="card-room-select"><option value="">Select room</option></select>
+                  <input type="text" id="card-number" placeholder="Card number" required />
+                  <div class="form-actions">
+                    <button type="submit">Save Link</button>
+                    <button type="button" id="card-cancel" class="secondary">Cancel</button>
+                  </div>
+                </form>
+              </div>
+              <div class="module-card table-card">
+                <h3>Card list</h3>
+                <table>
+                  <thead>
+                    <tr><th>Guest</th><th>Room</th><th>Card</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="card-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section id="access-module" class="panel hidden">
+            <div class="panel-heading flow-header">
+              <div>
+                <h2>Access & Permissions</h2>
+                <p class="muted">Control who can use each module by defining roles and users.</p>
+              </div>
+            </div>
+            <div class="access-grid">
+              <div class="sub-panel">
+                <h3>Role management</h3>
+                <form id="role-form" class="stack-form compact">
+                  <input type="hidden" id="role-id" />
+                  <input type="text" id="role-name" placeholder="Role name" required />
+                  <div class="checkbox-grid">
+                    <label><input type="checkbox" value="overview" data-role-module checked /> Overview</label>
+                    <label><input type="checkbox" value="rooms" data-role-module /> Rooms</label>
+                    <label><input type="checkbox" value="guests" data-role-module /> Guests</label>
+                    <label><input type="checkbox" value="guestStats" data-role-module /> Guest Stats</label>
+                    <label><input type="checkbox" value="cardManagement" data-role-module /> Card Management</label>
+                    <label><input type="checkbox" value="stats" data-role-module /> Statistics</label>
+                    <label><input type="checkbox" value="access" data-role-module /> Access</label>
+                  </div>
+                  <div class="inline-actions">
+                    <button type="submit">Save Role</button>
+                    <button type="button" id="role-cancel" class="secondary">Cancel</button>
+                  </div>
+                </form>
+                <p class="form-hint">Create role templates that grant module access to users.</p>
+                <table>
+                  <thead>
+                    <tr><th>Role</th><th>Modules</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="role-list"></tbody>
+                </table>
+              </div>
+
+              <div class="sub-panel">
+                <h3>User management</h3>
+                <form id="user-form" class="stack-form compact">
+                  <input type="hidden" id="user-id" />
+                  <input type="text" id="user-name-input" placeholder="Username" required />
+                  <input type="password" id="user-password" placeholder="Password" required />
+                  <select id="user-role-select"></select>
+                  <select id="user-status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                  <div class="inline-actions">
+                    <button type="submit">Save User</button>
+                    <button type="button" id="user-cancel" class="secondary">Cancel</button>
+                  </div>
+                </form>
+                <p class="form-hint">Define user accounts and connect them to roles.</p>
+                <table>
+                  <thead>
+                    <tr><th>Username</th><th>Role</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="user-list"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
 
     <script src="/app.js"></script>

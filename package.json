@@ -2,6 +2,7 @@
   "name": "kost-management-node-sqlite",
   "version": "1.0.0",
   "description": "Simple admin dashboard for managing kost rooms and guests with KTP uploads",
+  "type": "commonjs",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
