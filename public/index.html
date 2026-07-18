@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kost Management</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header>
+        <div>
+          <p class="eyebrow">Admin Dashboard</p>
+          <h1>Kost Management</h1>
+        </div>
+        <p class="subtitle">Manage rooms, guests, and KTP uploads from one place.</p>
+      </header>
+
+      <section class="panel">
+        <h2>Room List</h2>
+        <form id="room-form" class="grid-form">
+          <input type="hidden" id="room-id" />
+          <input type="text" id="room-name" placeholder="Room name" required />
+          <input type="text" id="room-type" placeholder="Type" required />
+          <input type="number" id="room-price" placeholder="Price" min="0" required />
+          <select id="room-status">
+            <option value="available">Available</option>
+            <option value="occupied">Occupied</option>
+          </select>
+          <button type="submit">Save Room</button>
+          <button type="button" id="room-cancel" class="secondary">Cancel</button>
+        </form>
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Type</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="room-list"></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>Guest List</h2>
+        <form id="guest-form" class="grid-form">
+          <input type="hidden" id="guest-id" />
+          <input type="text" id="guest-name" placeholder="Full name" required />
+          <input type="text" id="guest-phone" placeholder="Phone" />
+          <select id="guest-room"></select>
+          <input type="text" id="guest-card" placeholder="Card number" />
+          <input type="text" id="guest-notes" placeholder="Notes" />
+          <select id="guest-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <button type="submit">Save Guest</button>
+          <button type="button" id="guest-cancel" class="secondary">Cancel</button>
+        </form>
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Phone</th><th>Room</th><th>Card</th><th>KTP</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="guest-list"></tbody>
+        </table>
+      </section>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

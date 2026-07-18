@@ -1,0 +1,26 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f6f7fb;
+  color: #132238;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: linear-gradient(135deg, #eef4ff, #f8f9fc); }
+.app-shell { max-width: 1180px; margin: 0 auto; padding: 24px; }
+header { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 24px; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.72rem; color: #5a6b84; margin: 0 0 6px; }
+h1 { margin: 0; font-size: 1.8rem; }
+.subtitle { margin: 0; color: #5a6b84; }
+.panel { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(19,34,56,0.08); margin-bottom: 24px; }
+.grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
+input, select, button { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #dfe6f0; font: inherit; }
+button { cursor: pointer; background: #2f6fcf; color: white; border: none; }
+button.secondary { background: #eef2f7; color: #132238; }
+button.danger { background: #dc3545; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eef2f7; }
+.actions button { width: auto; padding: 6px 10px; margin-right: 6px; }
+.badge { display: inline-block; padding: 4px 8px; border-radius: 999px; background: #eaf4ff; color: #2f6fcf; font-size: 0.8rem; }
+img.ktp-preview { max-width: 90px; max-height: 70px; border-radius: 8px; object-fit: cover; }
+@media (max-width: 720px) { header { flex-direction: column; align-items: start; } }
