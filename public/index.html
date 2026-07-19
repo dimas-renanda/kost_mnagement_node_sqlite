@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kost Management</title>
+    <link rel="stylesheet" href="/node_modules/datatables.net-dt/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="/styles.css" />
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/datatables.net/js/dataTables.min.js"></script>
   </head>
   <body>
     <div id="login-screen" class="auth-screen">
@@ -129,7 +132,7 @@
                 <p class="muted">Manage room inventory with a clean form-and-table workflow.</p>
               </div>
             </div>
-            <div class="module-grid">
+            <div class="module-stack">
               <div class="module-card form-card">
                 <h3>Room details</h3>
                 <form id="room-form" class="grid-form">
@@ -151,14 +154,9 @@
                   </div>
                 </form>
               </div>
-              <div class="module-card table-card">
+              <div class="module-card table-card full-width-table">
                 <h3>Room list</h3>
-                <table>
-                  <thead>
-                    <tr><th>Name</th><th>Type</th><th>Price</th><th>Status</th><th>Actions</th></tr>
-                  </thead>
-                  <tbody id="room-list"></tbody>
-                </table>
+                <div id="room-list" class="gridjs-wrapper"></div>
               </div>
             </div>
           </section>
@@ -167,23 +165,14 @@
             <div class="panel-heading flow-header">
               <div>
                 <h2>Guest Management</h2>
-                <p class="muted">Search guests quickly and add or update guest profiles in a popup form.</p>
+                <p class="muted">Manage guest profiles and stay details in a polished, searchable table.</p>
               </div>
               <div class="guest-controls">
-                <input id="guest-search-input" class="search-input" type="search" placeholder="Search guests" aria-label="Search guests" />
                 <button type="button" id="open-guest-modal" class="secondary">Add guest</button>
               </div>
             </div>
-            <div class="module-card table-card">
-              <h3>Guest list</h3>
-              <div class="table-scroll">
-                <table>
-                  <thead>
-                    <tr><th>Name</th><th>Phone</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Card</th><th>Status</th><th>Actions</th></tr>
-                  </thead>
-                  <tbody id="guest-list"></tbody>
-                </table>
-              </div>
+            <div class="table-shell">
+              <div id="guest-list" class="gridjs-wrapper"></div>
             </div>
           </section>
           <div id="guest-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="guest-modal-title">
@@ -274,6 +263,14 @@
                 <p>Checked Out</p>
                 <strong id="guest-checked-out">0</strong>
               </article>
+              <article class="stat-card">
+                <p>Registered Cards</p>
+                <strong id="guest-registered-cards">0</strong>
+              </article>
+              <article class="stat-card">
+                <p>Inactive Guests (with card)</p>
+                <strong id="guest-inactive-cards">0</strong>
+              </article>
             </div>
             <div class="stats-grid">
               <article class="stat-card">
@@ -292,12 +289,7 @@
             <div class="module-card table-card">
               <h3>Guest stay history</h3>
               <div class="table-scroll">
-                <table>
-                  <thead>
-                    <tr><th>Name</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Stay (days)</th><th>Status</th></tr>
-                  </thead>
-                  <tbody id="guest-stats-list"></tbody>
-                </table>
+                <div id="guest-stats-list" class="gridjs-wrapper"></div>
               </div>
             </div>
           </section>
@@ -309,7 +301,7 @@
                 <p class="muted">Link guest cards to rooms and manage card assignments in one place.</p>
               </div>
             </div>
-            <div class="module-grid">
+            <div class="module-stack">
               <div class="module-card form-card">
                 <h3>Card assignment</h3>
                 <form id="card-form" class="grid-form">
@@ -323,14 +315,9 @@
                   </div>
                 </form>
               </div>
-              <div class="module-card table-card">
+              <div class="module-card table-card full-width-table">
                 <h3>Card list</h3>
-                <table>
-                  <thead>
-                    <tr><th>Guest</th><th>Room</th><th>Card</th><th>Status</th><th>Actions</th></tr>
-                  </thead>
-                  <tbody id="card-list"></tbody>
-                </table>
+                <div id="card-list" class="gridjs-wrapper"></div>
               </div>
             </div>
           </section>
@@ -363,12 +350,7 @@
                   </div>
                 </form>
                 <p class="form-hint">Create role templates that grant module access to users.</p>
-                <table>
-                  <thead>
-                    <tr><th>Role</th><th>Modules</th><th>Actions</th></tr>
-                  </thead>
-                  <tbody id="role-list"></tbody>
-                </table>
+                <div id="role-list" class="gridjs-wrapper"></div>
               </div>
 
               <div class="sub-panel">
@@ -388,16 +370,22 @@
                   </div>
                 </form>
                 <p class="form-hint">Define user accounts and connect them to roles.</p>
-                <table>
-                  <thead>
-                    <tr><th>Username</th><th>Role</th><th>Status</th><th>Actions</th></tr>
-                  </thead>
-                  <tbody id="user-list"></tbody>
-                </table>
+                <div id="user-list" class="gridjs-wrapper"></div>
               </div>
             </div>
           </section>
         </main>
+      </div>
+    </div>
+
+    <div id="shared-modal" class="shared-modal hidden" role="dialog" aria-modal="true" aria-labelledby="shared-modal-title">
+      <div class="shared-modal-card">
+        <div class="shared-modal-header">
+          <h3 id="shared-modal-title">Dialog</h3>
+          <button type="button" id="shared-modal-close" class="icon-button" aria-label="Close dialog">×</button>
+        </div>
+        <div id="shared-modal-body"></div>
+        <div id="shared-modal-actions" class="shared-modal-actions"></div>
       </div>
     </div>
 

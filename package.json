@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "datatables.net-dt": "^2.3.8",
     "express": "^4.19.2",
+    "gridjs": "^6.2.0",
+    "jquery": "^4.0.0",
     "multer": "^2.2.0",
     "sqlite3": "^5.1.1"
   }

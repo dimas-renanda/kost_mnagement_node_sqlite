@@ -19,6 +19,7 @@ fs.mkdirSync(uploadsDir, { recursive: true });
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/node_modules', express.static(path.join(rootDir, 'node_modules')));
 app.use(express.static(path.join(rootDir, 'public')));
 
 function createAdminToken() {
@@ -267,6 +268,8 @@ app.get('/api/guest-stats', async (_req, res) => {
     const checkedOutGuests = enriched.filter((guest) => guest.stayDays !== null);
     const totalGuests = guests.length;
     const activeGuests = guests.filter((guest) => guest.status === 'active').length;
+    const registeredCards = guests.filter((guest) => guest.cardNumber && String(guest.cardNumber).trim() !== '').length;
+    const inactiveGuestCards = guests.filter((guest) => guest.status === 'inactive' && guest.cardNumber && String(guest.cardNumber).trim() !== '').length;
     const stayDaysList = checkedOutGuests.map((guest) => guest.stayDays);
     const averageStayDays = stayDaysList.length ? Math.round(stayDaysList.reduce((sum, days) => sum + days, 0) / stayDaysList.length) : 0;
     const longestStayDays = stayDaysList.length ? Math.max(...stayDaysList) : 0;
@@ -275,6 +278,8 @@ app.get('/api/guest-stats', async (_req, res) => {
     res.json({
       totalGuests,
       activeGuests,
+      registeredCards,
+      inactiveGuestCards,
       currentGuests,
       checkedOutGuests: checkedOutGuests.length,
       averageStayDays,
